@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { isUnit } from './constants';
 
@@ -32,10 +32,6 @@ function App() {
   const [results, setResults] = useState<SearchResult[]>([]);
   const [chosenResult, setChosenResult] = useState<SearchResult | null>(null);
 
-  useEffect(() => {
-    console.log(chosenResult);
-  }, [chosenResult]);
-
   const validateAddress = (address: string): boolean => {
     // This regex checks for:
     // - One or more numbers at the start
@@ -55,9 +51,6 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isValid) {
-      console.log('Valid address:', search);
-    }
     const streetNumber = search.split(' ')[0];
     const streetName = search.split(' ').slice(1).join(' ').toUpperCase();
 
@@ -70,8 +63,7 @@ function App() {
       );
 
       const data = await res.json();
-      console.log(data.result.records);
-      setResults(data.result.records);
+      setResults(data.result?.records || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -101,19 +93,21 @@ function App() {
             <button disabled={!isValid}>Search</button>
           </form>
           <small>
-            Example: <strong>123 Main</strong> instead of 123 Main Street
+            Example: ✅ 123 Main <strong>vs</strong> ❌ 123 Main Street
           </small>
         </div>
         {results?.length > 0 && (
           <div id='results'>
-            Possible Matches
+            <p>Possible Matches</p>
             {results?.map(result => (
               <div
                 key={result._id}
                 className='search-result'
                 onClick={() => handleResultClick(result)}
               >
-                {result.MAIL_STREET_ADDRESS}, {result.ZIP_CODE}
+                {result.MAIL_STREET_ADDRESS}
+                <br />
+                {result.MAIL_CITY}, {result.MAIL_STATE}, {result.ZIP_CODE}
               </div>
             ))}
           </div>
