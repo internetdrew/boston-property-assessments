@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 
 type SearchResult = {
   _id: number;
-  ST_NUM: string;
-  ST_NAME: string;
   ZIP_CODE: string;
-  UNIT_NUM: string;
+  MAIL_STREET_ADDRESS: string;
+  MAIL_CITY: string;
+  MAIL_STATE: string;
+  YR_BUILT: string;
+  YR_REMODEL: string;
+  BLDG_VALUE: string;
 };
 
 function App() {
@@ -14,6 +17,10 @@ function App() {
   const [isValid, setIsValid] = useState(false);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [chosenResult, setChosenResult] = useState<SearchResult | null>(null);
+
+  useEffect(() => {
+    console.log(chosenResult);
+  }, [chosenResult]);
 
   const validateAddress = (address: string): boolean => {
     // This regex checks for:
@@ -92,8 +99,7 @@ function App() {
                 className='search-result'
                 onClick={() => handleResultClick(result)}
               >
-                {result.ST_NUM} {result.ST_NAME}
-                {result.UNIT_NUM && `, Unit ${result.UNIT_NUM}`},{' '}
+                {result.MAIL_STREET_ADDRESS}
                 {result.ZIP_CODE}
               </div>
             ))}
@@ -103,10 +109,17 @@ function App() {
           <div id='chosen-result' className='chosen-result'>
             <h3>Property Assessment Details</h3>
             <h4>
-              {chosenResult.ST_NUM} {chosenResult.ST_NAME}
-              {chosenResult.UNIT_NUM && `, Unit ${chosenResult.UNIT_NUM}`},{' '}
-              {chosenResult.ZIP_CODE}
+              {chosenResult.MAIL_STREET_ADDRESS},{chosenResult.ZIP_CODE}
+              <br />
+              {chosenResult.MAIL_CITY}, {chosenResult.MAIL_STATE}
             </h4>
+
+            <section className='receipt-section'>
+              <h4>Building Information</h4>
+              <p>Year Built: {chosenResult.YR_BUILT}</p>
+              <p>Last Remodel: {chosenResult.YR_REMODEL}</p>
+              <p>Total Value: ${chosenResult.BLDG_VALUE}</p>
+            </section>
           </div>
         )}
       </main>

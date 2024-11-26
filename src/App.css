@@ -46,6 +46,10 @@ main {
   padding: 0.8rem;
   font-size: 1rem;
   width: 100%;
+  font-family: inherit;
+}
+#search-form input::placeholder {
+  font-size: 0.8rem;
 }
 
 #search-form button {
@@ -96,8 +100,7 @@ main {
   padding: 1rem;
   border: 1px solid #ccc;
   background-color: #fff;
-  font-family: 'Geist Mono', monospace;
-  transform: rotate(-1deg);
+  transform: rotate(-0.5deg);
   transform-origin: center;
   transition: transform 0.3s ease-out;
 
@@ -123,4 +126,12 @@ main {
   font-weight: 400;
   color: #555;
   margin-top: 0.5rem;
+}
+
+.receipt-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 2rem 0;
+  font-size: 0.9rem;
 }
