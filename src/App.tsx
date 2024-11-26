@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import { CODE_LOOKUP } from './constants';
 
 type SearchResult = {
   _id: number;
@@ -10,6 +11,18 @@ type SearchResult = {
   YR_BUILT: string;
   YR_REMODEL: string;
   BLDG_VALUE: string;
+  LU: string;
+  TOTAL_VALUE: string;
+  LIVING_AREA: string;
+  BED_RMS: string;
+  FULL_BTH: string;
+  HLF_BTH: string;
+  LAND_VALUE: string;
+  GROSS_TAX: string;
+  NUM_PARKING: string;
+  FIREPLACES: string;
+  KITCHEN_TYPE: string;
+  LAND_SF: string;
 };
 
 function App() {
@@ -99,8 +112,7 @@ function App() {
                 className='search-result'
                 onClick={() => handleResultClick(result)}
               >
-                {result.MAIL_STREET_ADDRESS}
-                {result.ZIP_CODE}
+                {result.MAIL_STREET_ADDRESS}, {result.ZIP_CODE}
               </div>
             ))}
           </div>
@@ -116,9 +128,29 @@ function App() {
 
             <section className='receipt-section'>
               <h4>Building Information</h4>
-              <p>Year Built: {chosenResult.YR_BUILT}</p>
-              <p>Last Remodel: {chosenResult.YR_REMODEL}</p>
-              <p>Total Value: ${chosenResult.BLDG_VALUE}</p>
+              <p>Year Built: {chosenResult.YR_BUILT || 'N/A'}</p>
+              <p>Last Remodel: {chosenResult.YR_REMODEL || 'N/A'}</p>
+              <p>Living Area: {chosenResult.LIVING_AREA} sq ft</p>
+              <p>Bedrooms: {chosenResult.BED_RMS}</p>
+              <p>Full Bathrooms: {chosenResult.FULL_BTH}</p>
+              <p>Half Bathrooms: {chosenResult.HLF_BTH}</p>
+            </section>
+
+            <section className='receipt-section'>
+              <h4>Assessment Values</h4>
+              <p>Building: ${chosenResult.BLDG_VALUE}</p>
+              <p>Land: ${chosenResult.LAND_VALUE}</p>
+              <p>Total: ${chosenResult.TOTAL_VALUE}</p>
+              <p>Annual Tax: {chosenResult.GROSS_TAX}</p>
+              <p>Land Use: {CODE_LOOKUP.get(chosenResult.LU) || 'N/A'}</p>
+            </section>
+
+            <section className='receipt-section'>
+              <h4>Features</h4>
+              <div>Parking Spaces: {chosenResult.NUM_PARKING}</div>
+              <div>Fireplaces: {chosenResult.FIREPLACES}</div>
+              <div>Kitchen: {chosenResult.KITCHEN_TYPE.split('- ')[1]}</div>
+              <div>Lot Size: {chosenResult.LAND_SF} sq ft</div>
             </section>
           </div>
         )}
