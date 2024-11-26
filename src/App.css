@@ -1,0 +1,52 @@
+#header {
+  text-align: center;
+  margin-top: 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#header h2 {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #555;
+}
+
+#search {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+#search h3 {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #555;
+}
+
+#search-form {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+#search-form input {
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  max-width: 20rem;
+  min-width: 20rem;
+  padding: 0.8rem;
+  font-size: 1rem;
+}
+
+#search-form button {
+  border-radius: 0.5rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  background-color: #0077b6;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+}
