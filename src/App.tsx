@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { CODE_LOOKUP } from './constants';
+import { isUnit } from './constants';
 
 type SearchResult = {
   _id: number;
@@ -23,6 +23,7 @@ type SearchResult = {
   FIREPLACES: string;
   KITCHEN_TYPE: string;
   LAND_SF: string;
+  RES_FLOOR: string;
 };
 
 function App() {
@@ -105,7 +106,7 @@ function App() {
         </div>
         {results?.length > 0 && (
           <div id='results'>
-            Results:
+            Possible Matches
             {results?.map(result => (
               <div
                 key={result._id}
@@ -127,30 +128,41 @@ function App() {
             </h4>
 
             <section className='receipt-section'>
-              <h4>Building Information</h4>
+              <h4>
+                {isUnit(chosenResult.LU) ? 'Unit' : 'Building'} Information
+              </h4>
               <p>Year Built: {chosenResult.YR_BUILT || 'N/A'}</p>
               <p>Last Remodel: {chosenResult.YR_REMODEL || 'N/A'}</p>
-              <p>Living Area: {chosenResult.LIVING_AREA} sq ft</p>
-              <p>Bedrooms: {chosenResult.BED_RMS}</p>
-              <p>Full Bathrooms: {chosenResult.FULL_BTH}</p>
-              <p>Half Bathrooms: {chosenResult.HLF_BTH}</p>
+              <p>Floors: {chosenResult.RES_FLOOR || 'N/A'}</p>
+              <p>Living Area: {chosenResult.LIVING_AREA || 'N/A'} sq ft</p>
+              <p>Bedrooms: {chosenResult.BED_RMS || 'N/A'}</p>
+              <p>Full Bathrooms: {chosenResult.FULL_BTH || 'N/A'}</p>
+              <p>Half Bathrooms: {chosenResult.HLF_BTH || 'N/A'}</p>
             </section>
 
             <section className='receipt-section'>
               <h4>Assessment Values</h4>
-              <p>Building: ${chosenResult.BLDG_VALUE}</p>
-              <p>Land: ${chosenResult.LAND_VALUE}</p>
-              <p>Total: ${chosenResult.TOTAL_VALUE}</p>
-              <p>Annual Tax: {chosenResult.GROSS_TAX}</p>
-              <p>Land Use: {CODE_LOOKUP.get(chosenResult.LU) || 'N/A'}</p>
+              <p>
+                {isUnit(chosenResult.LU) ? 'Unit' : 'Building'}: $
+                {chosenResult.BLDG_VALUE || 'N/A'}
+              </p>
+              {!isUnit(chosenResult.LU) && (
+                <p>Land: ${chosenResult.LAND_VALUE || 'N/A'}</p>
+              )}
+              <p>Total: ${chosenResult.TOTAL_VALUE || 'N/A'}</p>
+              <p>Annual Tax: {chosenResult.GROSS_TAX || 'N/A'}</p>
             </section>
 
             <section className='receipt-section'>
               <h4>Features</h4>
-              <div>Parking Spaces: {chosenResult.NUM_PARKING}</div>
-              <div>Fireplaces: {chosenResult.FIREPLACES}</div>
-              <div>Kitchen: {chosenResult.KITCHEN_TYPE.split('- ')[1]}</div>
-              <div>Lot Size: {chosenResult.LAND_SF} sq ft</div>
+              <p>Parking Spaces: {chosenResult.NUM_PARKING || 'N/A'}</p>
+              <p>Fireplaces: {chosenResult.FIREPLACES || 'N/A'}</p>
+              <p>
+                Kitchen: {chosenResult.KITCHEN_TYPE?.split('- ')[1] || 'N/A'}
+              </p>
+              {!isUnit(chosenResult.LU) && (
+                <p>Lot Size: {chosenResult.LAND_SF || 'N/A'} sq ft</p>
+              )}
             </section>
           </div>
         )}

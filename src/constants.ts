@@ -1,6 +1,7 @@
 export const CODE_LOOKUP = new Map<string, string>([
   ['A', 'Residential 7 or more units'],
   ['AH', 'Agricultural/Horticultural'],
+  ['C', 'Commercial'],
   ['CC', 'Commercial Condominium'],
   ['CD', 'Residential Condominium Unit'],
   ['CL', 'Commercial Land'],
@@ -16,3 +17,7 @@ export const CODE_LOOKUP = new Map<string, string>([
   ['RC', 'Mixed Use Residential/Commercial'],
   ['RL', 'Residential Land'],
 ]);
+
+const UNIT_TYPES = new Set(['CD', 'R1', 'R2', 'R3', 'R4']);
+
+export const isUnit = (lu: string): boolean => UNIT_TYPES.has(lu);
