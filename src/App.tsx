@@ -103,7 +103,7 @@ function App() {
           <div id='chosen-result' className='chosen-result'>
             <h3>Property Assessment Details</h3>
             <h4>
-              {chosenResult.ST_NUM} {chosenResult.ST_NAME}{' '}
+              {chosenResult.ST_NUM} {chosenResult.ST_NAME}
               {chosenResult.UNIT_NUM && `, Unit ${chosenResult.UNIT_NUM}`},{' '}
               {chosenResult.ZIP_CODE}
             </h4>
