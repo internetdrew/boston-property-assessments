@@ -2,9 +2,10 @@ import { useState } from 'react';
 import './App.css';
 
 type SearchResult = {
-  id: string;
+  _id: number;
   ST_NUM: string;
   ST_NAME: string;
+  ZIP_CODE: string;
   UNIT_NUM: string;
 };
 
@@ -12,6 +13,7 @@ function App() {
   const [search, setSearch] = useState('');
   const [isValid, setIsValid] = useState(false);
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [chosenResult, setChosenResult] = useState<SearchResult | null>(null);
 
   const validateAddress = (address: string): boolean => {
     // This regex checks for:
@@ -54,6 +56,12 @@ function App() {
     }
   };
 
+  const handleResultClick = (result: SearchResult) => {
+    setSearch('');
+    setResults([]);
+    setChosenResult(result);
+  };
+
   return (
     <>
       <header id='header'>
@@ -66,6 +74,7 @@ function App() {
             <input
               type='text'
               placeholder='Enter building number and street name'
+              value={search}
               onChange={handleInputChange}
             />
             <button disabled={!isValid}>Search</button>
@@ -74,19 +83,32 @@ function App() {
             Example: <strong>123 Main</strong> instead of 123 Main Street
           </small>
         </div>
-        <div id='results'>
-          {results?.length > 0 && (
-            <>
-              Results:
-              {results?.map(result => (
-                <div key={result.id} className='search-result'>
-                  {result.ST_NUM} {result.ST_NAME}
-                  {result.UNIT_NUM && `, Unit ${result.UNIT_NUM}`}
-                </div>
-              ))}
-            </>
-          )}
-        </div>
+        {results?.length > 0 && (
+          <div id='results'>
+            Results:
+            {results?.map(result => (
+              <div
+                key={result._id}
+                className='search-result'
+                onClick={() => handleResultClick(result)}
+              >
+                {result.ST_NUM} {result.ST_NAME}
+                {result.UNIT_NUM && `, Unit ${result.UNIT_NUM}`},{' '}
+                {result.ZIP_CODE}
+              </div>
+            ))}
+          </div>
+        )}
+        {results.length === 0 && chosenResult && (
+          <div id='chosen-result' className='chosen-result'>
+            <h3>Property Assessment Details</h3>
+            <h4>
+              {chosenResult.ST_NUM} {chosenResult.ST_NAME}{' '}
+              {chosenResult.UNIT_NUM && `, Unit ${chosenResult.UNIT_NUM}`},{' '}
+              {chosenResult.ZIP_CODE}
+            </h4>
+          </div>
+        )}
       </main>
     </>
   );
