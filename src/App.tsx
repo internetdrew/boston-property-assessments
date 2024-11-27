@@ -80,7 +80,7 @@ function App() {
       <header id='header'>
         <h1>Boston Property Assessments</h1>
         <h2>Get property assessment data for Boston-based properties</h2>
-        <small id='built-by'>
+        <p id='built-by'>
           An{' '}
           <a
             href='https://www.internetdrew.com'
@@ -91,7 +91,7 @@ function App() {
             InternetDrew
           </a>{' '}
           Experience
-        </small>
+        </p>
       </header>
       <main>
         <div id='search'>
