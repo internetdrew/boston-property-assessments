@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import './App.css';
-import { isUnit } from './constants';
+import PropertyReceipt from './components/PropertyReceipt';
 
-type SearchResult = {
+export type Property = {
   _id: number;
   ZIP_CODE: string;
   MAIL_STREET_ADDRESS: string;
@@ -11,6 +11,7 @@ type SearchResult = {
   YR_BUILT: string;
   YR_REMODEL: string;
   BLDG_VALUE: string;
+  BLDG_TYPE: string;
   LU: string;
   TOTAL_VALUE: string;
   LIVING_AREA: string;
@@ -24,20 +25,18 @@ type SearchResult = {
   KITCHEN_TYPE: string;
   LAND_SF: string;
   RES_FLOOR: string;
+  GROSS_AREA: string;
+  LU_DESC: string;
+  CD_FLOOR: string;
 };
 
 function App() {
   const [search, setSearch] = useState('');
   const [isValid, setIsValid] = useState(false);
-  const [results, setResults] = useState<SearchResult[]>([]);
-  const [chosenResult, setChosenResult] = useState<SearchResult | null>(null);
+  const [results, setResults] = useState<Property[]>([]);
+  const [chosenProperty, setChosenProperty] = useState<Property | null>(null);
 
   const validateAddress = (address: string): boolean => {
-    // This regex checks for:
-    // - One or more numbers at the start
-    // - Followed by whitespace
-    // - Followed by words (street name)
-    // - Optionally followed by common street types (St, Ave, Road, etc.)
     const addressRegex =
       /^\d+\s+[A-Za-z\s]+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr)?$/i;
     return addressRegex.test(address.trim());
@@ -63,16 +62,17 @@ function App() {
       );
 
       const data = await res.json();
+      setChosenProperty(null);
       setResults(data.result?.records || []);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
-  const handleResultClick = (result: SearchResult) => {
+  const handleResultClick = (property: Property) => {
     setSearch('');
     setResults([]);
-    setChosenResult(result);
+    setChosenProperty(property);
   };
 
   return (
@@ -80,6 +80,18 @@ function App() {
       <header id='header'>
         <h1>Boston Property Assessments</h1>
         <h2>Get property assessment data for Boston-based properties</h2>
+        <small id='built-by'>
+          An{' '}
+          <a
+            href='https://www.internetdrew.com'
+            target='_blank'
+            rel='noopener noreferrer'
+            aria-label='InternetDrew website (opens in a new tab)'
+          >
+            InternetDrew
+          </a>{' '}
+          Experience
+        </small>
       </header>
       <main>
         <div id='search'>
@@ -92,9 +104,7 @@ function App() {
             />
             <button disabled={!isValid}>Search</button>
           </form>
-          <small>
-            Example: ✅ 123 Main <strong>vs</strong> ❌ 123 Main Street
-          </small>
+          <small>Example: Enter "123 Main" not "123 Main Street"</small>
         </div>
         {results?.length > 0 && (
           <div id='results'>
@@ -112,54 +122,7 @@ function App() {
             ))}
           </div>
         )}
-        {results.length === 0 && chosenResult && (
-          <div id='chosen-result' className='chosen-result'>
-            <h3>Property Assessment Details</h3>
-            <h4>
-              {chosenResult.MAIL_STREET_ADDRESS},{chosenResult.ZIP_CODE}
-              <br />
-              {chosenResult.MAIL_CITY}, {chosenResult.MAIL_STATE}
-            </h4>
-
-            <section className='receipt-section'>
-              <h4>
-                {isUnit(chosenResult.LU) ? 'Unit' : 'Building'} Information
-              </h4>
-              <p>Year Built: {chosenResult.YR_BUILT || 'N/A'}</p>
-              <p>Last Remodel: {chosenResult.YR_REMODEL || 'N/A'}</p>
-              <p>Floors: {chosenResult.RES_FLOOR || 'N/A'}</p>
-              <p>Living Area: {chosenResult.LIVING_AREA || 'N/A'} sq ft</p>
-              <p>Bedrooms: {chosenResult.BED_RMS || 'N/A'}</p>
-              <p>Full Bathrooms: {chosenResult.FULL_BTH || 'N/A'}</p>
-              <p>Half Bathrooms: {chosenResult.HLF_BTH || 'N/A'}</p>
-            </section>
-
-            <section className='receipt-section'>
-              <h4>Assessment Values</h4>
-              <p>
-                {isUnit(chosenResult.LU) ? 'Unit' : 'Building'}: $
-                {chosenResult.BLDG_VALUE || 'N/A'}
-              </p>
-              {!isUnit(chosenResult.LU) && (
-                <p>Land: ${chosenResult.LAND_VALUE || 'N/A'}</p>
-              )}
-              <p>Total: ${chosenResult.TOTAL_VALUE || 'N/A'}</p>
-              <p>Annual Tax: {chosenResult.GROSS_TAX || 'N/A'}</p>
-            </section>
-
-            <section className='receipt-section'>
-              <h4>Features</h4>
-              <p>Parking Spaces: {chosenResult.NUM_PARKING || 'N/A'}</p>
-              <p>Fireplaces: {chosenResult.FIREPLACES || 'N/A'}</p>
-              <p>
-                Kitchen: {chosenResult.KITCHEN_TYPE?.split('- ')[1] || 'N/A'}
-              </p>
-              {!isUnit(chosenResult.LU) && (
-                <p>Lot Size: {chosenResult.LAND_SF || 'N/A'} sq ft</p>
-              )}
-            </section>
-          </div>
-        )}
+        {chosenProperty && <PropertyReceipt property={chosenProperty} />}
       </main>
     </>
   );

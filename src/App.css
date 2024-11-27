@@ -7,13 +7,17 @@
 }
 
 #header h1 {
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 600;
 }
 
 #header h2 {
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 400;
+}
+
+#header h2,
+#built-by {
   color: #555;
 }
 
@@ -54,7 +58,9 @@ main {
   font-family: inherit;
 }
 #search-form input::placeholder {
+  font-family: 'Geist Mono', monospace;
   font-size: 0.8rem;
+  letter-spacing: 0.005rem;
 }
 
 #search-form button {
@@ -113,23 +119,30 @@ main {
 }
 
 .chosen-result {
+  font-family: 'Geist Mono', monospace;
   margin: 2rem 0;
   padding: 2rem;
-  border: 1px solid #ccc;
   background-color: #fff;
-  transform: rotate(-1deg);
-  transform-origin: center;
-  transition: transform 0.3s ease-out;
 
   --mask: conic-gradient(
-      from -45deg at bottom,
-      #0000,
-      #000 1deg 90deg,
-      #0000 91deg
-    )
-    50% / 12px 100%;
+        from 135deg at top,
+        #0000,
+        #000 1deg 89deg,
+        #0000 90deg
+      )
+      top/12px 51% repeat-x,
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg)
+      bottom/12px 51% repeat-x;
   -webkit-mask: var(--mask);
   mask: var(--mask);
+}
+
+@media (min-width: 425px) {
+  .chosen-result {
+    transform: rotate(-3deg);
+    transform-origin: center;
+    transition: transform 0.3s ease-out;
+  }
 }
 
 .chosen-result h3 {

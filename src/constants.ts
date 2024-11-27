@@ -18,6 +18,6 @@ export const CODE_LOOKUP = new Map<string, string>([
   ['RL', 'Residential Land'],
 ]);
 
-const UNIT_TYPES = new Set(['CD', 'R1', 'R2', 'R3', 'R4']);
+const CONDO_TYPES = new Set(['CD', 'CM', 'CC', 'CP']);
 
-export const isUnit = (lu: string): boolean => UNIT_TYPES.has(lu);
+export const isCondo = (lu: string) => CONDO_TYPES.has(lu);
