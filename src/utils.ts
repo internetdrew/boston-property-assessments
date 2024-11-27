@@ -1,3 +1,3 @@
 export const formatHypenatedString = (str: string) => {
-  return str.split('-')[1].trim();
+  return str?.split('-')[1]?.trim();
 };
