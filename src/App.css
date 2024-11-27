@@ -12,11 +12,11 @@
 }
 
 #header h2 {
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 400;
+  color: #555;
 }
 
-#header h2,
 #built-by {
   color: #555;
 }
